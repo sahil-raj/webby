@@ -53,7 +53,7 @@ class Webby:
         df.head()
 
         x = [row_headers, table_body_values]
-        with open("dump.json", "w") as myFile:
+        with open("dump.json", "a") as myFile:
            myFile.writelines(json.dumps(x))
 
 
