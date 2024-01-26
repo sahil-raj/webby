@@ -29,7 +29,7 @@
 from bs4 import BeautifulSoup
 import requests
 import json
-import pandas as pd
+import pandas
 
 class Webby:
   def getTableData(self,url):
@@ -41,6 +41,7 @@ class Webby:
           for headers in rows.find_all('th'):
             row_headers.append(headers.text)
         print(row_headers)
+        print("\n")
         tableBody= soup.tbody
         table_body_values=[]
         for rows in tableBody.find_all('tr')[1:]:
@@ -50,6 +51,10 @@ class Webby:
         print(table_body_values)
         df= pandas.DataFrame(table_body_values, columns=row_headers)
         df.head()
+
+        x = [row_headers, table_body_values]
+        with open("dump.json", "w") as myFile:
+           myFile.writelines(json.dumps(x))
 
 
         
