@@ -32,7 +32,7 @@ import json
 import pandas
 
 class Webby:
-  def getTableData(self,url):
+    def getTableData(self,url):
         r = requests.get(url)
         soup= BeautifulSoup(r.content,"html.parser")
         tableHead = soup.thead
@@ -40,6 +40,7 @@ class Webby:
         for rows in tableHead.find_all('tr'):
           for headers in rows.find_all('th'):
             row_headers.append(headers.text)
+        self.row_headers = row_headers
         print(row_headers)
         print("\n")
         tableBody= soup.tbody
@@ -48,12 +49,14 @@ class Webby:
           td_tags= rows.find_all('td')
           td_values =[headers.text  for headers in td_tags]
           table_body_values.append(td_values)
+        self.table_body_values = table_body_values
         print(table_body_values)
         df= pandas.DataFrame(table_body_values, columns=row_headers)
         df.head()
 
-        x = [row_headers, table_body_values]
-        with open("dump.json", "a") as myFile:
+    def dumpToJsonFile(self, fileName):
+        x = [self.row_headers, self.table_body_values]
+        with open(fileName, "a") as myFile:
            myFile.writelines(json.dumps(x))
 
 
@@ -62,4 +65,5 @@ class Webby:
 if __name__=="__main__":
   print_table_data=Webby()
   print_table_data.getTableData("https://trends.builtwith.com/websitelist/Responsive-Tables")
+  print_table_data.dumpToJsonFile("dump.json")
 
