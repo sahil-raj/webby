@@ -11,10 +11,11 @@ class Webby:
         d = requests.get(self.url)
         return d.content
     
-    def getTables(self, x):
+    def getTable(self, x):
         mySoup = BeautifulSoup(x, "html5lib")
-        return mySoup.find_all("table")
-            
+        for table in mySoup.find_all("table"):
+            head = table.find_all('th')
+            print(head)
 
 
 
